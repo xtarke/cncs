@@ -24,7 +24,6 @@ volatile uint8_t data_i2c = 0;
 
 void EnablePulse();
 
-
 void EnablePulse(){
     SET_BIT(transmitData, E_I2C);
     i2c_write_single_byte(PCF_ADDR, transmitData);
@@ -75,8 +74,7 @@ void SendCmd(uint8_t c, uint8_t cd)				//c é o dado  e cd indica se é instruç
   *
   * @retval Nenhum.
   */
-//LCD_I2C()
-void init()
+void LcdIinit()
 {
     /* 0x08 -> Bit para habilitação do backlight */
     transmitData = 0x08;

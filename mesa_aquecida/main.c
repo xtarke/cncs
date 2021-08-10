@@ -8,16 +8,17 @@
 
 #include <msp430.h> 
 
+#include "temperatura.h"
+#include "display/lcd_i2c.h"
 #include "lib/i2c_master_g2452.h"
 
-#include "display/lcd_i2c.h"
 
 #ifndef __MSP430G2452__
     #error "Clock system not supported for this device"
 #endif
 
 
-#define CLOCK_1MHz
+#define CLOCK_8MHz
 
 void init_clock_system();
 
@@ -30,31 +31,44 @@ int main(void)
 {
     volatile unsigned int i;
 
+    char string[16];
+
     WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 
-	P1DIR = BIT0;
+	P1DIR = BIT0 | BIT1;
 
 	init_i2c_master_mode();
 
    __enable_interrupt();
 
-   init();
+   LcdIinit();
+
+   init_hardware_temperatura();
+
+   WriteString("Hi");
 
 	while(1){
-	    P1OUT ^= BIT0;
+	    // CPL_BIT(P1OUT,BIT0);
 
-	    //i2c_write_single_byte(0, 0x00);
-        _delay_cycles(100000);
+	    snprintf(string, sizeof(string), "%d      %d  ", get_temp(), get_set_point());
 
-        //i2c_write_single_byte(0, 0xff);
-        _delay_cycles(100000);
+	    SendCmd(LCD_LINE_0, LCD_CMD);
+	    WriteString(string);
+
+	    SendCmd(LCD_LINE_1, LCD_CMD);
+	    if (get_on_off())
+	        WriteString("On ");
+	    else
+	        WriteString("Off");
+
+	    //_delay_cycles(1000000);
+
+	    LPM0;
 
 	}
 
 	return 0;
 }
-
-
 
 
 

@@ -11,27 +11,7 @@
 
 #include <stdint.h>
 
-typedef enum i2c_modeE_enum{
-    IDLE_MODE,
-    NACK_MODE,
-    TX_REG_ADDRESS_MODE,
-    RX_REG_ADDRESS_MODE,
-    TX_DATA_MODE,
-    RX_DATA_MODE,
-    SWITCH_TO_RX_MODE,
-    SWITHC_TO_TX_MODE,
-    TIMEOUT_MODE
-} i2c_mode;
-
 void init_i2c_master_mode();
-i2c_mode i2c_write_single_byte(uint8_t dev_addr, uint8_t byte);
-
-
-i2c_mode i2c_master_write_reg(uint8_t dev_addr, uint8_t reg_addr, uint8_t *reg_data, uint8_t count);
-i2c_mode i2c_master_read_reg(uint8_t dev_addr, uint8_t reg_addr, uint8_t count, uint8_t *data);
-
-
-void CopyArray(uint8_t *source, uint8_t *dest, uint8_t count);
-
+uint8_t i2c_write_single_byte(uint8_t dev_addr, uint8_t byte);
 
 #endif /* LIB_I2C_MASTER_G2452_H_ */
