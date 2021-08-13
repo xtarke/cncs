@@ -32,7 +32,7 @@ void init_hardware_temperatura(){
     PORT_OUT(BUTTON_PORTS) |= (BUTTON_ON_OFF | BUTTON_INC | BUTTON_DEC);
 
 
-    /* Timer triggered, repeated channel 3 */
+    /* Timer triggered, repeated channel 2 */
     ADC10CTL1 = ADC10DIV_3 + INCH_3 + SHS_1 + CONSEQ_2;
     /* REF=2.5V*/
     ADC10CTL0 = SREF_1 + ADC10SHT_3 + REF2_5V + ADC10IE + REFON + ADC10ON;
