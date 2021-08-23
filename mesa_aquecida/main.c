@@ -8,6 +8,7 @@
 
 #include <msp430.h> 
 
+#include "wdt.h"
 #include "temperatura.h"
 #include "display/lcd_i2c.h"
 #include "lib/i2c_master_g2452.h"
@@ -35,7 +36,6 @@ int main(void)
 
     WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 
-	P1DIR = BIT0 | BIT1;
 
 	init_i2c_master_mode();
 
@@ -48,22 +48,31 @@ int main(void)
    WriteString("Hi");
 
 	while(1){
-	    // CPL_BIT(P1OUT,BIT0);
 
-	    snprintf(string, sizeof(string), "%d      %d  ", get_temp(), get_set_point());
+	    uint8_t set_point = get_set_point();
+	    uint8_t temperature = get_temp();
+	    uint8_t on_off = get_on_off();
+
+	    snprintf(string, sizeof(string), "%d C    %d C ", temperature, set_point);
 
 	    SendCmd(LCD_LINE_0, LCD_CMD);
 	    WriteString(string);
 
 	    SendCmd(LCD_LINE_1, LCD_CMD);
-	    if (get_on_off())
+	    if (on_off)
 	        WriteString("On ");
 	    else
 	        WriteString("Off");
 
-	    //_delay_cycles(1000000);
+	    if (on_off)
+            if (temperature > set_point + 1)
+                turn_off();
 
-	    LPM0;
+            if (temperature < set_point - 1)
+                turn_on();
+
+	    //delay_wdt();
+        __delay_cycles(1000000);
 
 	}
 

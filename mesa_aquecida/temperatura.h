@@ -16,4 +16,7 @@ uint16_t get_temp();
 uint8_t get_on_off();
 uint8_t get_set_point();
 
+void turn_on();
+void turn_off();
+
 #endif /* TEMPERATURA_H_ */
