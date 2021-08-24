@@ -15,7 +15,7 @@
 
 
 #ifndef __MSP430G2452__
-    #error "Clock system not supported for this device"
+#error "Clock system not supported for this device"
 #endif
 
 
@@ -31,64 +31,61 @@ void init_clock_system();
 int main(void)
 {
     volatile unsigned int i;
-
     char string[16];
 
-    WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
+    /* Stop watchdog timer */
+    WDTCTL = WDTPW | WDTHOLD;
 
+    init_i2c_master_mode();
+    LcdIinit();
 
-	init_i2c_master_mode();
+    init_hardware_temperatura();
 
-   __enable_interrupt();
+    while(1){
 
-   LcdIinit();
+        volatile uint8_t set_point = get_set_point();
+        volatile uint8_t temperature = get_temp();
+        volatile uint8_t on_off = get_on_off();
 
-   init_hardware_temperatura();
+        snprintf(string, sizeof(string), "%d C    %d C ", temperature, set_point);
 
-   WriteString("Hi");
+        SendCmd(LCD_LINE_0, LCD_CMD);
+        WriteString(string);
 
-	while(1){
+        SendCmd(LCD_LINE_1, LCD_CMD);
 
-	    uint8_t set_point = get_set_point();
-	    uint8_t temperature = get_temp();
-	    uint8_t on_off = get_on_off();
+        if (on_off){
+            WriteString("On ");
 
-	    snprintf(string, sizeof(string), "%d C    %d C ", temperature, set_point);
-
-	    SendCmd(LCD_LINE_0, LCD_CMD);
-	    WriteString(string);
-
-	    SendCmd(LCD_LINE_1, LCD_CMD);
-	    if (on_off)
-	        WriteString("On ");
-	    else
-	        WriteString("Off");
-
-	    if (on_off)
-            if (temperature > set_point + 1)
+            if (temperature > set_point)
                 turn_off();
-
-            if (temperature < set_point - 1)
+            else if (temperature < set_point)
                 turn_on();
+        }
+        else {
 
-	    //delay_wdt();
-        __delay_cycles(1000000);
+            WriteString("Off");
+            turn_off();
+        }
 
-	}
+        //delay_wdt();
+        __delay_cycles(100000);
 
-	return 0;
+    }
+
+    return 0;
 }
 
 
 
 /**
-  * @brief  Configura sistema de clock para usar o Digitally Controlled Oscillator (DCO).
-  *         Utililiza-se as calibrações internas gravadas na flash.
-  *         Exemplo baseado na documentação da Texas: msp430g2xxx3_dco_calib.c
-  * @param  none
-  *
-  * @retval none
-  */
+ * @brief  Configura sistema de clock para usar o Digitally Controlled Oscillator (DCO).
+ *         Utililiza-se as calibrações internas gravadas na flash.
+ *         Exemplo baseado na documentação da Texas: msp430g2xxx3_dco_calib.c
+ * @param  none
+ *
+ * @retval none
+ */
 void init_clock_system(){
 
 #ifdef CLOCK_1MHz

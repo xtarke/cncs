@@ -13,11 +13,8 @@
 
 void delay_wdt()
 {
-     WDTCTL = WDT_ADLY_250;
 
-     /* Ativa IRQ do Watchdog */
-     IE1 |= WDTIE;
-     __bis_SR_register(CPUOFF + GIE);
+     __bis_SR_register(CPUOFF);
 }
 
 
@@ -30,8 +27,11 @@ void __attribute__ ((interrupt(WDT_VECTOR))) watchdog_timer (void)
 #error Compiler not supported!
 #endif
 {
-    __bic_SR_register_on_exit(CPUOFF);
+    //WDTCTL = WDTPW | WDTHOLD;
 
-    CLR_BIT(IE1,WDTIE);
+    CPL_BIT(P1OUT, BIT0);
+
+    //__bic_SR_register_on_exit(CPUOFF);
+
 
 }

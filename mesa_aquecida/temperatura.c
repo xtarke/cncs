@@ -75,7 +75,6 @@ void init_hardware_temperatura(){
     TACCR0 = 30;                              // Delay to allow Ref to settle
     TACCTL0 |= CCIE;
 
-
     ADC10CTL0 |= ENC;
     /* Toggle trigger ADC on TAR = 0 (CCR1 = 0) */
     TACCTL1 = OUTMOD_4;
@@ -136,7 +135,7 @@ void __attribute__ ((interrupt(ADC10_VECTOR))) ADC10_ISR (void)
     i++;
     i = i & 0x7;
 
-    CPL_BIT(P1OUT,BIT1);
+    // CPL_BIT(P1OUT,BIT1);
 }
 
 /* TimerA Interrupt Service Routine */
@@ -160,11 +159,6 @@ void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) ta0_isr (void)
         if (!(--counter)) {
             /* Colocar aqui código da aplicação referente ao botão */
             CPL_BIT(on_off,BIT0);
-
-            if (on_off)
-                CLR_BIT(PORT_OUT(POWER_PORT),POWER_PIN);
-            else
-                SET_BIT(PORT_OUT(POWER_PORT),POWER_PIN);
 
             /* Acorda função main */
             __bic_SR_register_on_exit(LPM0_bits);

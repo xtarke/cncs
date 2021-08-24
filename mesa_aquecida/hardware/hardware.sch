@@ -409,18 +409,16 @@ Wire Wire Line
 Wire Wire Line
 	9100 4800 9100 5050
 Connection ~ 9100 4800
-Wire Wire Line
-	8800 5250 8450 5250
 $Comp
 L Device:R R8
 U 1 1 611F5185
-P 8450 5450
-F 0 "R8" H 8520 5496 50  0000 L CNN
-F 1 "500R" H 8520 5405 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 8380 5450 50  0001 C CNN
-F 3 "~" H 8450 5450 50  0001 C CNN
-	1    8450 5450
-	1    0    0    -1  
+P 8450 4900
+F 0 "R8" H 8520 4946 50  0000 L CNN
+F 1 "500R" H 8520 4855 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 8380 4900 50  0001 C CNN
+F 3 "~" H 8450 4900 50  0001 C CNN
+	1    8450 4900
+	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR028
@@ -433,30 +431,12 @@ F 3 "" H 9100 5650 50  0001 C CNN
 	1    9100 5650
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GND #PWR025
-U 1 1 611FA791
-P 8450 5650
-F 0 "#PWR025" H 8450 5400 50  0001 C CNN
-F 1 "GND" H 8455 5477 50  0000 C CNN
-F 2 "" H 8450 5650 50  0001 C CNN
-F 3 "" H 8450 5650 50  0001 C CNN
-	1    8450 5650
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8450 5250 8450 5300
-Wire Wire Line
-	8450 5600 8450 5650
 Wire Wire Line
 	9100 5450 9100 5650
 Wire Wire Line
 	9700 5000 9700 5650
 Text GLabel 8200 5250 0    50   Input ~ 0
 POWER
-Wire Wire Line
-	8200 5250 8450 5250
-Connection ~ 8450 5250
 $Comp
 L pspice:DIODE D3
 U 1 1 61203C01
@@ -9133,4 +9113,24 @@ EndData
 $EndBitmap
 Wire Wire Line
 	9700 3950 9700 4300
+$Comp
+L power:+3V3 #PWR0104
+U 1 1 6127A009
+P 8450 4600
+F 0 "#PWR0104" H 8450 4450 50  0001 C CNN
+F 1 "+3V3" H 8465 4773 50  0000 C CNN
+F 2 "" H 8450 4600 50  0001 C CNN
+F 3 "" H 8450 4600 50  0001 C CNN
+	1    8450 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8200 5250 8450 5250
+Wire Wire Line
+	8450 4600 8450 4750
+Wire Wire Line
+	8450 5050 8450 5250
+Connection ~ 8450 5250
+Wire Wire Line
+	8450 5250 8800 5250
 $EndSCHEMATC
