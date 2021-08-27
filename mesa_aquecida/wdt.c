@@ -6,15 +6,24 @@
  */
 
 #include <msp430.h>
+#include <stdint.h>
 
 #include "wdt.h"
 #include "lib/bits.h"
 
+volatile uint16_t counter = 0;
 
+/* Sleep for approximate 320 ms */
 void delay_wdt()
 {
+    counter = 10;
+    /* 32ms interval (default) @ 1MHZ */
+    WDTCTL = WDT_MDLY_32;
+    /* Ativa IRQ do Watchdog */
+    IE1 |= WDTIE;
 
-     __bis_SR_register(CPUOFF);
+    __bis_SR_register(LPM0_bits + GIE);
+
 }
 
 
@@ -27,11 +36,13 @@ void __attribute__ ((interrupt(WDT_VECTOR))) watchdog_timer (void)
 #error Compiler not supported!
 #endif
 {
-    //WDTCTL = WDTPW | WDTHOLD;
+    counter--;
 
-    CPL_BIT(P1OUT, BIT0);
-
-    //__bic_SR_register_on_exit(CPUOFF);
-
+    /* Wake up after the delay */
+    if (!counter){
+        WDTCTL = WDTPW | WDTHOLD;
+        /* CPL_BIT(P1OUT, BIT0); */
+        __bic_SR_register_on_exit(CPUOFF);
+    }
 
 }

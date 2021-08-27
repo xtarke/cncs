@@ -37,8 +37,10 @@ int main(void)
     WDTCTL = WDTPW | WDTHOLD;
 
     init_i2c_master_mode();
-    LcdIinit();
 
+    __enable_interrupt();
+
+    LcdIinit();
     init_hardware_temperatura();
 
     while(1){
@@ -68,8 +70,8 @@ int main(void)
             turn_off();
         }
 
-        //delay_wdt();
-        __delay_cycles(100000);
+        delay_wdt();
+        //__delay_cycles(100000);
 
     }
 

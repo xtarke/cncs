@@ -91,6 +91,9 @@ uint16_t get_temp(){
 
     if (data < 0)
         temp = ntc_table[0];
+    /* Protection, keep hot if NTC is open */
+    else if (data > 900)
+        temp = 250;
     else if (data > 800)
         temp = ntc_table[799];
     else
