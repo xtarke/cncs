@@ -90,8 +90,8 @@ $132 = 200.000    (z max travel, mm)
 
 | Parâmetro  |             |
 |------------|-------------|
-| Clearance  | 12mils      |
-| Track W    | 20 a 30mils |
+| Clearance  | > 12mils (20 recomendável)     |
+| Track W    | 20 a 30mils (30 recomendável) |
 | Via Dia    | 1.8mm       |
 | Via Drill  | 0.6mm       |
 | uVia Drill | 1.8mm       |
